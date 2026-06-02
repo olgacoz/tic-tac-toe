@@ -17,3 +17,10 @@ const gameBoard = (() => {
 
   return { populateBoard, getBoard };
 })();
+
+const createPlayer = (name, token) => {
+  const getName = () => name;
+  const getToken = () => token;
+
+  return { getName, getToken };
+};
