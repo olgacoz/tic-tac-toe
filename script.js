@@ -22,5 +22,13 @@ const createPlayer = (name, token) => {
   const getName = () => name;
   const getToken = () => token;
 
-  return { getName, getToken };
+  const makeMove = (row, col) => {
+    const board = gameBoard.getBoard();
+
+    if (board[row][col] === '') {
+      board[row][col] = token;
+    }
+  }
+
+  return { getName, getToken, makeMove };
 };
