@@ -25,10 +25,40 @@ const createPlayer = (name, token) => {
   const makeMove = (row, col) => {
     const board = gameBoard.getBoard();
 
-    if (board[row][col] === '') {
-      board[row][col] = token;
-    }
+    board[row][col] = token;
   }
 
   return { getName, getToken, makeMove };
+};
+
+const gameController = () => {
+  const player1 = createPlayer('Player 1', 'x');
+  const player2 = createPlayer('Player 2', 'o');
+  const board = gameBoard.getBoard();
+
+  let activePlayer = player1;
+
+  const getActivePlayer = () => activePlayer;
+  const switchActivePlayer = () => {
+    activePlayer = activePlayer === player1 ? player2 : player1;
+  };
+
+  const printNewRound = () => {
+    console.log(board);
+    console.log(`It's ${getActivePlayer().getName()}'s turn.`);
+  };
+
+  const playRound = (row, col) => {
+    if (board[row][col] === '') {
+      console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
+      activePlayer.makeMove(row, col);
+
+      switchActivePlayer();
+      printNewRound();
+    }
+  }
+
+  printNewRound();
+
+  return { getActivePlayer, playRound };
 };
