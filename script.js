@@ -31,8 +31,13 @@ const gameBoard = (() => {
 })();
 
 const createPlayer = (name, token) => {
+  let score = 0;
+
   const getName = () => name;
   const getToken = () => token;
+  const getScore = () => score;
+  const incrementScore = () => { score++; };
+  const resetScore = () => { score = 0; };
 
   const makeMove = (row, col) => {
     const board = gameBoard.getBoard();
@@ -40,7 +45,7 @@ const createPlayer = (name, token) => {
     board[row][col] = token;
   }
 
-  return { getName, getToken, makeMove };
+  return { getName, getToken, makeMove, getScore, incrementScore, resetScore };
 };
 
 const gameController = () => {
