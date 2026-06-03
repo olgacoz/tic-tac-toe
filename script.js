@@ -13,9 +13,21 @@ const gameBoard = (() => {
   };
   const getBoard = () => board;
 
+  const isFull = () => {
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        if (board[i][j] === '') {
+          return false;
+        }
+      }
+    }
+    
+    return true;
+  }
+
   setBoard();
 
-  return { setBoard, getBoard };
+  return { setBoard, getBoard, isFull };
 })();
 
 const createPlayer = (name, token) => {
@@ -53,6 +65,12 @@ const gameController = () => {
       console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
       activePlayer.makeMove(row, col);
 
+      if (gameBoard.isFull()) {
+        console.log(board);
+        console.log(`It's a draw!`);
+        return;
+      }
+
       switchActivePlayer();
       printNewRound();
     }
@@ -62,3 +80,5 @@ const gameController = () => {
 
   return { getActivePlayer, playRound };
 };
+
+const game = gameController();
