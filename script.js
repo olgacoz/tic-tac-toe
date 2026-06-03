@@ -2,20 +2,20 @@ const gameBoard = (() => {
   const board = [];
   const boardSize = 3;
 
-  const populateBoard = () => {
+  const setBoard = () => {
     for (let i = 0; i < boardSize; i++) {
-      board.push([]);
+      board[i] = [];
 
       for (let j = 0; j < boardSize; j++) {
-        board[i].push('');
+        board[i][j] = '';
       }
     }
   };
   const getBoard = () => board;
 
-  populateBoard();
+  setBoard();
 
-  return { populateBoard, getBoard };
+  return { setBoard, getBoard };
 })();
 
 const createPlayer = (name, token) => {
