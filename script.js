@@ -140,10 +140,13 @@ const gameController = () => {
     return true; // we win in secondary diagonal!
   };
 
-  const checkWin = () => {
-    // will check for (Horizontal, Vertial, Diagonal) win.
-
-  }
+  const checkWin = (grid, token) => {
+    return (
+      checkDiagonalWin(grid, token) ||
+      checkHorizontalWin(grid, token) ||
+      checkVerticalWin(grid, token)
+    );
+  };
 
   const playRound = (row, col) => {
     const moveValid = gameBoard.placeToken(row, col, activePlayer.getToken());
