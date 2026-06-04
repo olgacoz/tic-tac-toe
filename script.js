@@ -1,9 +1,8 @@
 const gameBoard = (() => {
-  let board = [];
+  const board = [];
   const boardSize = 3;
 
   const clear = () => {
-    board = [];
     for (let i = 0; i < boardSize; i++) {
       board[i] = [];
 
