@@ -88,6 +88,27 @@ const gameController = () => {
     return false;
   }
 
+  // works for n x n matrices
+  const checkVerticalWin = (grid, token) => {
+    let tokenCounter = 0;
+
+    for (let i = 0; i < grid.length; i++) {
+      for (let j = 0; j < grid.length; j++) {
+        if (grid[j][i] !== token) {
+          tokenCounter = 0;
+          break;
+        } else {
+          tokenCounter++;
+        }
+      }
+      if (tokenCounter === grid.length) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   const checkWin = () => {
     // will check for (Horizontal, Vertial, Diagonal) win.
 
