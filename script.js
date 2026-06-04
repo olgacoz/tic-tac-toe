@@ -69,10 +69,11 @@ const gameController = () => {
 
   // All winner checking functions works for n x n matrices
   const checkHorizontalWin = (grid, token) => {
+    const gridSize = grid.length;
     let tokenCounter = 0;
 
-    for (let i = 0; i < grid.length; i++) {
-      for (let j = 0; j < grid.length; j++) {
+    for (let i = 0; i < gridSize; i++) {
+      for (let j = 0; j < gridSize; j++) {
         if (grid[i][j] !== token) {
           tokenCounter = 0;
           break;
@@ -80,7 +81,7 @@ const gameController = () => {
           tokenCounter++;
         }
       }
-      if (tokenCounter === grid.length) {
+      if (tokenCounter === gridSize) {
         return true;
       }
     }
@@ -89,10 +90,11 @@ const gameController = () => {
   };
 
   const checkVerticalWin = (grid, token) => {
+    const gridSize = grid.length;
     let tokenCounter = 0;
 
-    for (let i = 0; i < grid.length; i++) {
-      for (let j = 0; j < grid.length; j++) {
+    for (let i = 0; i < gridSize; i++) {
+      for (let j = 0; j < gridSize; j++) {
         if (grid[j][i] !== token) {
           tokenCounter = 0;
           break;
@@ -100,7 +102,7 @@ const gameController = () => {
           tokenCounter++;
         }
       }
-      if (tokenCounter === grid.length) {
+      if (tokenCounter === gridSize) {
         return true;
       }
     }
