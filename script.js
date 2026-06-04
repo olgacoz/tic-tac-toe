@@ -1,6 +1,6 @@
 const gameBoard = (() => {
   const board = [];
-  const boardSize = 3;
+  const boardSize = 3; // means 3 x 3
 
   const clear = () => {
     for (let i = 0; i < boardSize; i++) {
@@ -67,7 +67,7 @@ const gameController = () => {
     console.log(`It's ${getActivePlayer().getName()}'s turn.`);
   };
 
-  // works for n x n matrices
+  // All winner checking functions works for n x n matrices
   const checkHorizontalWin = (grid, token) => {
     let tokenCounter = 0;
 
@@ -86,9 +86,8 @@ const gameController = () => {
     }
 
     return false;
-  }
+  };
 
-  // works for n x n matrices
   const checkVerticalWin = (grid, token) => {
     let tokenCounter = 0;
 
@@ -107,7 +106,37 @@ const gameController = () => {
     }
 
     return false;
-  }
+  };
+
+  const checkDiagonalWin = (grid, token) => {
+    const gridSize = grid.length;
+    let tokenCounter = 0;
+
+    // check for main diagonal first
+    for (let i = 0; i < gridSize; i++) {
+      if (grid[i][i] !== token) {
+        // we couldn't win in main diagonal
+        tokenCounter = 0;
+        break;
+      } else {
+        tokenCounter++;
+      }
+    }
+    if (tokenCounter === gridSize) {
+      return true;
+    } else {
+      tokenCounter = 0;
+    }
+
+    // check for secondary diagonal
+    for (let i = 0; i < gridSize; i++) {
+      if (grid[i][gridSize - 1 - i] !== token) {
+        // we couldn't win on either the main diagonal or the secondary diagonal.
+        return false;
+      }
+    }
+    return true; // we win in secondary diagonal!
+  };
 
   const checkWin = () => {
     // will check for (Horizontal, Vertial, Diagonal) win.
