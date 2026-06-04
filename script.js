@@ -56,10 +56,15 @@ const gameController = () => {
   const player2 = createPlayer('Player 2', 'o');
 
   let activePlayer = player1;
+  let isGameOver = false;
 
   const getActivePlayer = () => activePlayer;
   const switchActivePlayer = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
+  };
+
+  const printScores = () => {
+    console.log(`SCORES: ${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`);
   };
 
   const printNewRound = () => {
@@ -149,19 +154,35 @@ const gameController = () => {
   };
 
   const playRound = (row, col) => {
-    const moveValid = gameBoard.placeToken(row, col, activePlayer.getToken());
+    if (isGameOver) {
+      gameBoard.clear();
+      isGameOver = false;
+      activePlayer = player1;
+      console.log('New game has been started!');
+    }
 
-    // gotta make here working
+    const moveValid = gameBoard.placeToken(row, col, activePlayer.getToken());
+    const grid = gameBoard.getGrid();
+
     if (moveValid) {
       console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
 
-      if (checkWin()) {
+      if (checkWin(grid, activePlayer.getToken())) {
+        console.log(grid);
         console.log(`${activePlayer.getName()} wins!`);
+
         activePlayer.incrementScore();
+        printScores();
+        isGameOver = true;
+
         return;
       } else if (gameBoard.isFull()) {
-        console.log(gameBoard.getGrid());
+        console.log(grid);
         console.log(`It's a draw!`);
+
+        printScores();
+        isGameOver = true;
+
         return;
       }
 
