@@ -1,8 +1,9 @@
 const gameBoard = (() => {
-  const board = [];
+  let board = [];
   const boardSize = 3;
 
-  const setBoard = () => {
+  const clear = () => {
+    board = [];
     for (let i = 0; i < boardSize; i++) {
       board[i] = [];
 
@@ -11,7 +12,9 @@ const gameBoard = (() => {
       }
     }
   };
-  const getBoard = () => board;
+
+  const getGrid = () => board;
+  const getSize = () => boardSize;
 
   const isFull = () => {
     for (let i = 0; i < boardSize; i++) {
@@ -21,13 +24,20 @@ const gameBoard = (() => {
         }
       }
     }
-    
     return true;
+  };
+
+  const placeToken = (row, col, token) => {
+    if (board[row][col] === '') {
+      board[row][col] = token;
+      return true;
+    }
+    return false;
   }
 
-  setBoard();
+  clear();
 
-  return { setBoard, getBoard, isFull };
+  return { clear, getGrid, isFull, getSize, placeToken };
 })();
 
 const createPlayer = (name, token) => {
@@ -39,19 +49,12 @@ const createPlayer = (name, token) => {
   const incrementScore = () => { score++; };
   const resetScore = () => { score = 0; };
 
-  const makeMove = (row, col) => {
-    const board = gameBoard.getBoard();
-
-    board[row][col] = token;
-  }
-
-  return { getName, getToken, makeMove, getScore, incrementScore, resetScore };
+  return { getName, getToken, getScore, incrementScore, resetScore };
 };
 
 const gameController = () => {
   const player1 = createPlayer('Player 1', 'x');
   const player2 = createPlayer('Player 2', 'o');
-  const board = gameBoard.getBoard();
 
   let activePlayer = player1;
 
@@ -61,25 +64,37 @@ const gameController = () => {
   };
 
   const printNewRound = () => {
-    console.log(board);
+    console.log(gameBoard.getGrid());
     console.log(`It's ${getActivePlayer().getName()}'s turn.`);
   };
 
-  const playRound = (row, col) => {
-    if (board[row][col] === '') {
-      console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
-      activePlayer.makeMove(row, col);
+  const checkWin = () => {
+    // will check for (Horizontal, Vertial, Diagonal) win.
+  }
 
-      if (gameBoard.isFull()) {
-        console.log(board);
+  const playRound = (row, col) => {
+    const moveValid = gameBoard.placeToken(row, col, activePlayer.getToken());
+
+    // gotta make here working
+    if (moveValid) {
+      console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
+
+      if (checkWin()) {
+        console.log(`${activePlayer.getName()} wins!`);
+        activePlayer.incrementScore();
+        return;
+      } else if (gameBoard.isFull()) {
+        console.log(gameBoard.getGrid());
         console.log(`It's a draw!`);
         return;
       }
 
       switchActivePlayer();
       printNewRound();
+    } else {
+      console.log("That space is already occupied! Try again.");
     }
-  }
+  };
 
   printNewRound();
 
