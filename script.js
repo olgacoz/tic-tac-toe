@@ -67,8 +67,30 @@ const gameController = () => {
     console.log(`It's ${getActivePlayer().getName()}'s turn.`);
   };
 
+  // works for n x n matrices
+  const checkHorizontalWin = (grid, token) => {
+    let tokenCounter = 0;
+
+    for (let i = 0; i < grid.length; i++) {
+      for (let j = 0; j < grid.length; j++) {
+        if (grid[i][j] !== token) {
+          tokenCounter = 0;
+          break;
+        } else {
+          tokenCounter++;
+        }
+      }
+      if (tokenCounter === grid.length) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   const checkWin = () => {
     // will check for (Horizontal, Vertial, Diagonal) win.
+
   }
 
   const playRound = (row, col) => {
