@@ -176,7 +176,7 @@ const gameController = () => {
       } else if (gameBoard.isFull()) {
         console.log(grid);
         console.log(`It's a draw!`);
-        
+
         printScores();
         isGameOver = true;
 
@@ -204,15 +204,24 @@ const gameController = () => {
 
 const displayController = (() => {
   const game = gameController();
+
   const boardDiv = document.querySelector('#game-board');
   const playAgainBtn = document.querySelector('#play-again-btn');
+  const currentTurn = document.querySelector('#current-turn');
+  const winnerMsg = document.querySelector('#winner-msg');
+
+  const printTurn = () => {
+    const activePlayerName = game.getActivePlayer().getName();
+    const activePlayerToken = game.getActivePlayer().getToken();
+
+    currentTurn.textContent = `It's ${activePlayerName}'s turn (${activePlayerToken})`;
+  }
 
   const renderEmptyBoard = (() => {
     const grid = gameBoard.getGrid();
     const gridSize = grid.length;
 
     boardDiv.textContent = '';
-
     boardDiv.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
     boardDiv.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
 
@@ -228,6 +237,8 @@ const displayController = (() => {
         boardDiv.appendChild(cell);
       }
     }
+
+    printTurn();
   })();
 
   const updateBoardDisplay = () => {
@@ -240,6 +251,8 @@ const displayController = (() => {
         cell.textContent = grid[row][col];
       }
     }
+
+    printTurn();
   };
 
   boardDiv.addEventListener('click', (e) => {
@@ -253,8 +266,8 @@ const displayController = (() => {
 
   playAgainBtn.addEventListener('click', () => {
     gameBoard.clear();
-    updateBoardDisplay();
     game.restart();
+    updateBoardDisplay();
   });
 
 })();
