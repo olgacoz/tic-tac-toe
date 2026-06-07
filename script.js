@@ -155,10 +155,7 @@ const gameController = () => {
 
   const playRound = (row, col) => {
     if (isGameOver) {
-      gameBoard.clear();
-      isGameOver = false;
-      activePlayer = player1;
-      console.log('New game has been started!');
+      return;
     }
 
     const moveValid = gameBoard.placeToken(row, col, activePlayer.getToken());
@@ -179,7 +176,7 @@ const gameController = () => {
       } else if (gameBoard.isFull()) {
         console.log(grid);
         console.log(`It's a draw!`);
-
+        
         printScores();
         isGameOver = true;
 
@@ -193,9 +190,71 @@ const gameController = () => {
     }
   };
 
+  const restart = () => {
+    isGameOver = false;
+    activePlayer = player1;
+    console.log('New game has been started!');
+    printNewRound();
+  };
+
   printNewRound();
 
-  return { getActivePlayer, playRound };
+  return { getActivePlayer, playRound, restart };
 };
 
-const game = gameController();
+const displayController = (() => {
+  const game = gameController();
+  const boardDiv = document.querySelector('#game-board');
+  const playAgainBtn = document.querySelector('#play-again-btn');
+
+  const renderEmptyBoard = (() => {
+    const grid = gameBoard.getGrid();
+    const gridSize = grid.length;
+
+    boardDiv.textContent = '';
+
+    boardDiv.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
+    boardDiv.style.gridTemplateColumns = `repeat(${gridSize}, 100px)`;
+
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        const cell = document.createElement('div');
+
+        cell.classList.add('cell');
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+        cell.textContent = grid[row][col];
+
+        boardDiv.appendChild(cell);
+      }
+    }
+  })();
+
+  const updateBoardDisplay = () => {
+    const grid = gameBoard.getGrid();
+    const gridSize = grid.length;
+
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        const cell = document.querySelector(`[data-row='${row}'][data-col='${col}']`);
+        cell.textContent = grid[row][col];
+      }
+    }
+  };
+
+  boardDiv.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('cell')) return; // clicked somewhere like border on the board
+
+    const clickedRow = parseInt(e.target.dataset.row);
+    const clickedCol = parseInt(e.target.dataset.col);
+    game.playRound(clickedRow, clickedCol);
+    updateBoardDisplay();
+  });
+
+  playAgainBtn.addEventListener('click', () => {
+    gameBoard.clear();
+    updateBoardDisplay();
+    game.restart();
+  });
+
+})();

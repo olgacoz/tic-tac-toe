@@ -1,3 +1,26 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background: black;
+  background-color: white;
+  min-height: 100vh;
+  padding: 5px;
+}
+
+#game-board {
+  display: inline-grid;
+  background-color: black;
+  border: 1px solid black;
+  grid-gap: 1px;
+}
+
+#game-board > .cell {
+  background-color: gray;
+  color: wheat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
