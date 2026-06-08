@@ -217,8 +217,7 @@ const displayController = (() => {
   }
 
   const renderEmptyBoard = () => {
-    const grid = gameBoard.getGrid();
-    const gridSize = grid.length;
+    const gridSize = gameBoard.getSize();
 
     boardDiv.textContent = '';
     boardDiv.style.gridTemplateRows = `repeat(${gridSize}, 100px)`;
