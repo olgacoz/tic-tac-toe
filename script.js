@@ -188,13 +188,13 @@ const game = (() => {
 
 const displayController = (() => {
   const boardDiv = document.querySelector('#game-board');
-  const startRestartBtn = document.querySelector('#start-restart-btn');
+  const startGameButton = document.querySelector('#start-game');
   const gameInfoDiv = document.querySelector('#game-info');
   const scoreboardDiv = document.querySelector('#scoreboard');
   const player1NameInput = document.querySelector('#player1');
   const player2NameInput = document.querySelector('#player2');
 
-  let startRestartBtnPressed = false;
+  let gameStarted = false;
 
   const printTurnMsg = () => {
     const activePlayerName = game.getActivePlayer().getName();
@@ -260,11 +260,11 @@ const displayController = (() => {
     if (game.getWinner()) {
       printWinnerMsg(game.getWinner().getName());
       printScores();
-      startRestartBtnPressed = false;
+      gameStarted = false;
     } else if (game.getIsDraw()) {
       printDrawMsg();
       printScores();
-      startRestartBtnPressed = false;
+      gameStarted = false;
     } else {
       printTurnMsg();
     }
@@ -273,7 +273,7 @@ const displayController = (() => {
   boardDiv.addEventListener('click', (e) => {
     if (!e.target.classList.contains('cell')) return; // clicked somewhere like border on the board
 
-    if (startRestartBtnPressed) {
+    if (gameStarted) {
       const clickedRow = parseInt(e.target.dataset.row);
       const clickedCol = parseInt(e.target.dataset.col);
       game.playRound(clickedRow, clickedCol);
@@ -281,14 +281,14 @@ const displayController = (() => {
     }
   });
 
-  startRestartBtn.addEventListener('click', () => {
+  startGameButton.addEventListener('click', () => {
     const [player1, player2] = game.getPlayers();
 
     player1.setName(player1NameInput.value.trim() === '' ? 'Player 1' : player1NameInput.value);
     player2.setName(player2NameInput.value.trim() === '' ? 'Player 2' : player2NameInput.value);
 
-    startRestartBtnPressed = true;
-    startRestartBtn.textContent = "Restart Game";
+    gameStarted = true;
+    startGameButton.textContent = "Restart Game";
 
     gameBoard.clear();
     game.restart();
