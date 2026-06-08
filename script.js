@@ -288,6 +288,7 @@ const displayController = (() => {
     player2.setName(player2NameInput.value.trim() === '' ? 'Player 2' : player2NameInput.value);
 
     startRestartBtnPressed = true;
+    startRestartBtn.textContent = "Restart Game";
 
     gameBoard.clear();
     game.restart();
