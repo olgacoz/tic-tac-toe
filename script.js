@@ -43,15 +43,16 @@ const createPlayer = (name, token) => {
   let score = 0;
 
   const getName = () => name;
+  const setName = (newName) => { name = newName; };
   const getToken = () => token;
   const getScore = () => score;
   const incrementScore = () => { score++; };
   const resetScore = () => { score = 0; };
 
-  return { getName, getToken, getScore, incrementScore, resetScore };
+  return { getName, getToken, getScore, incrementScore, resetScore, setName };
 };
 
-const gameController = () => {
+const game = (() => {
   const player1 = createPlayer('Player 1', 'X');
   const player2 = createPlayer('Player 2', 'O');
 
@@ -174,15 +175,17 @@ const gameController = () => {
   };
 
   return { getActivePlayer, playRound, restart, isGameOver, getPlayers };
-};
+})();
 
 const displayController = (() => {
-  const game = gameController();
-
   const boardDiv = document.querySelector('#game-board');
-  const playAgainBtn = document.querySelector('#play-again-btn');
+  const startRestartBtn = document.querySelector('#start-restart-btn');
   const gameInfoDiv = document.querySelector('#game-info');
   const scoreboardDiv = document.querySelector('#scoreboard');
+  const player1NameInput = document.querySelector('#player1');
+  const player2NameInput = document.querySelector('#player2');
+
+  let startRestartBtnPressed = false;
 
   const printTurnMsg = () => {
     const activePlayerName = game.getActivePlayer().getName();
@@ -226,7 +229,6 @@ const displayController = (() => {
       }
     }
 
-    printTurnMsg();
     printScores();
   };
 
@@ -250,9 +252,11 @@ const displayController = (() => {
     if (gameBoard.isFull()) {
       printDrawMsg();
       printScores();
+      startRestartBtnPressed = false;
     } else if (game.isGameOver()) { // board is not full and game is over
       printWinnerMsg(game.getActivePlayer().getName());
       printScores();
+      startRestartBtnPressed = false;
     } else {
       printTurnMsg();
     }
@@ -261,16 +265,26 @@ const displayController = (() => {
   boardDiv.addEventListener('click', (e) => {
     if (!e.target.classList.contains('cell')) return; // clicked somewhere like border on the board
 
-    const clickedRow = parseInt(e.target.dataset.row);
-    const clickedCol = parseInt(e.target.dataset.col);
-    game.playRound(clickedRow, clickedCol);
-    updateBoardDisplay();
+    if (startRestartBtnPressed) {
+      const clickedRow = parseInt(e.target.dataset.row);
+      const clickedCol = parseInt(e.target.dataset.col);
+      game.playRound(clickedRow, clickedCol);
+      updateBoardDisplay();
+    }
   });
 
-  playAgainBtn.addEventListener('click', () => {
+  startRestartBtn.addEventListener('click', () => {
+    const [player1, player2] = game.getPlayers();
+
+    player1.setName(player1NameInput.value.trim() === '' ? 'Player 1' : player1NameInput.value);
+    player2.setName(player2NameInput.value.trim() === '' ? 'Player 2' : player2NameInput.value);
+
+    startRestartBtnPressed = true;
+
     gameBoard.clear();
     game.restart();
     renderEmptyBoard();
+    printTurnMsg();
   });
 
   renderEmptyBoard();
