@@ -58,13 +58,18 @@ const game = (() => {
 
   let activePlayer = player1;
   let gameOver = false;
+  let winner = null;
+  let isDraw = false;
 
   const isGameOver = () => gameOver;
+  const getWinner = () => winner;
+  const getIsDraw = () => isDraw;
   const getActivePlayer = () => activePlayer;
+  const getPlayers = () => [player1, player2];
+
   const switchActivePlayer = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
   };
-  const getPlayers = () => [player1, player2];
 
   // All winner checking functions works for n x n matrices
   const checkHorizontalWin = (grid, token) => {
@@ -158,9 +163,11 @@ const game = (() => {
     if (moveValid) {
       if (checkWin(grid, activePlayer.getToken())) {
         activePlayer.incrementScore();
+        winner = activePlayer;
         gameOver = true;
         return;
       } else if (gameBoard.isFull()) {
+        isDraw = true;
         gameOver = true;
         return;
       }
@@ -171,10 +178,12 @@ const game = (() => {
 
   const restart = () => {
     gameOver = false;
+    winner = null;
+    isDraw = false;
     activePlayer = player1;
   };
 
-  return { getActivePlayer, playRound, restart, isGameOver, getPlayers };
+  return { getActivePlayer, playRound, restart, isGameOver, getPlayers, getWinner, getIsDraw };
 })();
 
 const displayController = (() => {
@@ -195,7 +204,7 @@ const displayController = (() => {
   };
 
   const printWinnerMsg = (winnerName) => {
-    gameInfoDiv.textContent = `${winnerName} win!`;
+    gameInfoDiv.textContent = `${winnerName} wins!`;
   };
 
   const printDrawMsg = () => {
@@ -204,7 +213,6 @@ const displayController = (() => {
 
   const printScores = () => {
     const [player1, player2] = game.getPlayers();
-
     scoreboardDiv.textContent = `${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`;
   }
 
@@ -249,12 +257,12 @@ const displayController = (() => {
       }
     }
 
-    if (gameBoard.isFull()) {
-      printDrawMsg();
+    if (game.getWinner()) {
+      printWinnerMsg(game.getWinner().getName());
       printScores();
       startRestartBtnPressed = false;
-    } else if (game.isGameOver()) { // board is not full and game is over
-      printWinnerMsg(game.getActivePlayer().getName());
+    } else if (game.getIsDraw()) {
+      printDrawMsg();
       printScores();
       startRestartBtnPressed = false;
     } else {
