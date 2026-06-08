@@ -56,21 +56,22 @@ const gameController = () => {
   const player2 = createPlayer('Player 2', 'O');
 
   let activePlayer = player1;
-  let isGameOver = false;
+  let gameOver = false;
 
+  const isGameOver = () => gameOver;
   const getActivePlayer = () => activePlayer;
   const switchActivePlayer = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
   };
 
-  const printScores = () => {
-    console.log(`SCORES: ${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`);
-  };
+  // const printScores = () => {
+  //   console.log(`SCORES: ${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`);
+  // };
 
-  const printNewRound = () => {
-    console.log(gameBoard.getGrid());
-    console.log(`It's ${getActivePlayer().getName()}'s turn.`);
-  };
+  // const printNewRound = () => {
+  //   console.log(gameBoard.getGrid());
+  //   console.log(`It's ${getActivePlayer().getName()}'s turn.`);
+  // };
 
   // All winner checking functions works for n x n matrices
   const checkHorizontalWin = (grid, token) => {
@@ -154,7 +155,7 @@ const gameController = () => {
   };
 
   const playRound = (row, col) => {
-    if (isGameOver) {
+    if (gameOver) {
       return;
     }
 
@@ -162,44 +163,44 @@ const gameController = () => {
     const grid = gameBoard.getGrid();
 
     if (moveValid) {
-      console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
+      // console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
 
       if (checkWin(grid, activePlayer.getToken())) {
-        console.log(grid);
-        console.log(`${activePlayer.getName()} wins!`);
+        // console.log(grid);
+        // console.log(`${activePlayer.getName()} wins!`);
 
         activePlayer.incrementScore();
-        printScores();
-        isGameOver = true;
+        // printScores();
+        gameOver = true;
 
         return;
       } else if (gameBoard.isFull()) {
-        console.log(grid);
-        console.log(`It's a draw!`);
+        // console.log(grid);
+        // console.log(`It's a draw!`);
 
-        printScores();
-        isGameOver = true;
+        // printScores();
+        gameOver = true;
 
         return;
       }
 
       switchActivePlayer();
-      printNewRound();
+      // printNewRound();
     } else {
       console.log("That space is already occupied! Try again.");
     }
   };
 
   const restart = () => {
-    isGameOver = false;
+    gameOver = false;
     activePlayer = player1;
-    console.log('New game has been started!');
-    printNewRound();
+    // console.log('New game has been started!');
+    // printNewRound();
   };
 
-  printNewRound();
+  // printNewRound();
 
-  return { getActivePlayer, playRound, restart };
+  return { getActivePlayer, playRound, restart, isGameOver };
 };
 
 const displayController = (() => {
@@ -207,15 +208,22 @@ const displayController = (() => {
 
   const boardDiv = document.querySelector('#game-board');
   const playAgainBtn = document.querySelector('#play-again-btn');
-  const currentTurn = document.querySelector('#current-turn');
-  const winnerMsg = document.querySelector('#winner-msg');
+  const gameInfoDiv = document.querySelector('#game-info');
 
-  const printTurn = () => {
+  const printTurnMsg = () => {
     const activePlayerName = game.getActivePlayer().getName();
     const activePlayerToken = game.getActivePlayer().getToken();
 
-    currentTurn.textContent = `It's ${activePlayerName}'s turn (${activePlayerToken})`;
-  }
+    gameInfoDiv.textContent = `It's ${activePlayerName}'s turn (${activePlayerToken})`;
+  };
+
+  const printWinnerMsg = (winnerName) => {
+    gameInfoDiv.textContent = `${winnerName} win!`;
+  };
+
+  const printDrawMsg = () => {
+    gameInfoDiv.textContent = `It's a draw!`;
+  };
 
   const renderEmptyBoard = () => {
     const grid = gameBoard.getGrid();
@@ -238,7 +246,7 @@ const displayController = (() => {
       }
     }
 
-    printTurn();
+    printTurnMsg();
   };
 
   const updateBoardDisplay = () => {
@@ -258,7 +266,13 @@ const displayController = (() => {
       }
     }
 
-    printTurn();
+    if (gameBoard.isFull()) {
+      printDrawMsg();
+    } else if (game.isGameOver()) { // board is not full and game is over
+      printWinnerMsg(game.getActivePlayer().getName());
+    } else {
+      printTurnMsg();
+    }
   };
 
   boardDiv.addEventListener('click', (e) => {
