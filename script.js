@@ -65,15 +65,6 @@ const gameController = () => {
   };
   const getPlayers = () => [player1, player2];
 
-  // const printScores = () => {
-  //   console.log(`SCORES: ${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`);
-  // };
-
-  // const printNewRound = () => {
-  //   console.log(gameBoard.getGrid());
-  //   console.log(`It's ${getActivePlayer().getName()}'s turn.`);
-  // };
-
   // All winner checking functions works for n x n matrices
   const checkHorizontalWin = (grid, token) => {
     const gridSize = grid.length;
@@ -164,42 +155,23 @@ const gameController = () => {
     const grid = gameBoard.getGrid();
 
     if (moveValid) {
-      // console.log(`Putting ${getActivePlayer().getName()}'s token into (${row},${col})`);
-
       if (checkWin(grid, activePlayer.getToken())) {
-        // console.log(grid);
-        // console.log(`${activePlayer.getName()} wins!`);
-
         activePlayer.incrementScore();
-        // printScores();
         gameOver = true;
-
         return;
       } else if (gameBoard.isFull()) {
-        // console.log(grid);
-        // console.log(`It's a draw!`);
-
-        // printScores();
         gameOver = true;
-
         return;
       }
 
       switchActivePlayer();
-      // printNewRound();
-    } else {
-      console.log("That space is already occupied! Try again.");
     }
   };
 
   const restart = () => {
     gameOver = false;
     activePlayer = player1;
-    // console.log('New game has been started!');
-    // printNewRound();
   };
-
-  // printNewRound();
 
   return { getActivePlayer, playRound, restart, isGameOver, getPlayers };
 };
