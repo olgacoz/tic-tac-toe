@@ -63,6 +63,7 @@ const gameController = () => {
   const switchActivePlayer = () => {
     activePlayer = activePlayer === player1 ? player2 : player1;
   };
+  const getPlayers = () => [player1, player2];
 
   // const printScores = () => {
   //   console.log(`SCORES: ${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`);
@@ -200,7 +201,7 @@ const gameController = () => {
 
   // printNewRound();
 
-  return { getActivePlayer, playRound, restart, isGameOver };
+  return { getActivePlayer, playRound, restart, isGameOver, getPlayers };
 };
 
 const displayController = (() => {
@@ -209,6 +210,7 @@ const displayController = (() => {
   const boardDiv = document.querySelector('#game-board');
   const playAgainBtn = document.querySelector('#play-again-btn');
   const gameInfoDiv = document.querySelector('#game-info');
+  const scoreboardDiv = document.querySelector('#scoreboard');
 
   const printTurnMsg = () => {
     const activePlayerName = game.getActivePlayer().getName();
@@ -224,6 +226,12 @@ const displayController = (() => {
   const printDrawMsg = () => {
     gameInfoDiv.textContent = `It's a draw!`;
   };
+
+  const printScores = () => {
+    const [player1, player2] = game.getPlayers();
+
+    scoreboardDiv.textContent = `${player1.getName()}: ${player1.getScore()} | ${player2.getName()}: ${player2.getScore()}`;
+  }
 
   const renderEmptyBoard = () => {
     const grid = gameBoard.getGrid();
@@ -247,6 +255,7 @@ const displayController = (() => {
     }
 
     printTurnMsg();
+    printScores();
   };
 
   const updateBoardDisplay = () => {
@@ -268,8 +277,10 @@ const displayController = (() => {
 
     if (gameBoard.isFull()) {
       printDrawMsg();
+      printScores();
     } else if (game.isGameOver()) { // board is not full and game is over
       printWinnerMsg(game.getActivePlayer().getName());
+      printScores();
     } else {
       printTurnMsg();
     }

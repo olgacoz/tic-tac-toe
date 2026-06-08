@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+input, button {
+  font: inherit;
+}
+
 body {
   background-color: white;
   min-height: 100vh;
@@ -14,11 +18,17 @@ body {
   align-items: center;
 }
 
+h1 {
+  margin-bottom: 10px;
+}
+
 #game-board {
   display: inline-grid;
   background-color: black;
   border: 1px solid black;
   grid-gap: 1px;
+  margin-bottom: 10px;
+  margin-top: 2px;
 }
 
 #game-board > .cell {
@@ -35,4 +45,22 @@ body {
 
 .cell.red {
   color: red;
+}
+
+#scoreboard {
+  font-size: medium;
+  font-weight: bold;
+  background-color: rgb(226, 226, 226);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+button {
+  padding: 5px 8px;
+  margin-top: 10px;
+  background-color: #027BFF;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  color: white;
 }
