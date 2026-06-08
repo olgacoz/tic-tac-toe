@@ -22,9 +22,17 @@ body {
 }
 
 #game-board > .cell {
-  background-color: gray;
-  color: wheat;
+  background-color: rgb(206, 206, 206);
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 50px;
+}
+
+.cell.blue {
+  color: blue;
+}
+
+.cell.red {
+  color: red;
 }

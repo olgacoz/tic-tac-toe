@@ -52,8 +52,8 @@ const createPlayer = (name, token) => {
 };
 
 const gameController = () => {
-  const player1 = createPlayer('Player 1', 'x');
-  const player2 = createPlayer('Player 2', 'o');
+  const player1 = createPlayer('Player 1', 'X');
+  const player2 = createPlayer('Player 2', 'O');
 
   let activePlayer = player1;
   let isGameOver = false;
@@ -217,7 +217,7 @@ const displayController = (() => {
     currentTurn.textContent = `It's ${activePlayerName}'s turn (${activePlayerToken})`;
   }
 
-  const renderEmptyBoard = (() => {
+  const renderEmptyBoard = () => {
     const grid = gameBoard.getGrid();
     const gridSize = grid.length;
 
@@ -239,7 +239,7 @@ const displayController = (() => {
     }
 
     printTurn();
-  })();
+  };
 
   const updateBoardDisplay = () => {
     const grid = gameBoard.getGrid();
@@ -249,6 +249,12 @@ const displayController = (() => {
       for (let col = 0; col < gridSize; col++) {
         const cell = document.querySelector(`[data-row='${row}'][data-col='${col}']`);
         cell.textContent = grid[row][col];
+
+        if (grid[row][col] === 'X') {
+          cell.classList.add('blue');
+        } else if (grid[row][col] === 'O') {
+          cell.classList.add('red');
+        }
       }
     }
 
@@ -267,7 +273,9 @@ const displayController = (() => {
   playAgainBtn.addEventListener('click', () => {
     gameBoard.clear();
     game.restart();
-    updateBoardDisplay();
+    renderEmptyBoard();
   });
+
+  renderEmptyBoard();
 
 })();
