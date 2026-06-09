@@ -4,6 +4,8 @@ A clean, browser-based Tic-Tac-Toe game built with HTML, CSS, and JavaScript foc
 
 [Live Demo](https://olgacoz.github.io/tic-tac-toe/)
 
+<img width="1470" height="835" alt="Screenshot 2026-06-09 at 08 06 34" src="https://github.com/user-attachments/assets/9df4ebdb-f6b2-4f88-bf56-f53a8c31c4cc" />
+
 ## Concepts Applied
 
 - **Module Pattern (IIFE):** Encapsulated the code into `gameBoard`, `game`, and `displayController` modules to prevent global scope pollution.
